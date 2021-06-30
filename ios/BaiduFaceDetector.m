@@ -25,4 +25,19 @@ RCT_EXPORT_METHOD(init:(NSString *)licenseId
   }
 }
 
+RCT_EXPORT_BLOCKING_SYNCHRONOUS_METHOD(canWork)
+{
+  return @[@([[FaceSDKManager sharedInstance] canWork])];
+}
+
+RCT_EXPORT_METHOD(initCollect)
+{
+  [[FaceSDKManager sharedInstance] initCollect];
+}
+
+RCT_EXPORT_METHOD(uninitCollect)
+{
+  [[FaceSDKManager sharedInstance] uninitCollect];
+}
+
 @end
