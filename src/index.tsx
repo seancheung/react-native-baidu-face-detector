@@ -5,8 +5,7 @@ type BaiduFaceDetectorProps = {
   style: ViewStyle;
 };
 
-export const BaiduFaceDetectorViewManager = requireNativeComponent<BaiduFaceDetectorProps>(
-'BaiduFaceDetectorView'
-);
+export const BaiduFaceDetectorViewManager =
+  requireNativeComponent<BaiduFaceDetectorProps>('BaiduFaceDetectorView');
 
 export default BaiduFaceDetectorViewManager;

@@ -1,4 +1,4 @@
-package com.reactnativebaidufacedetector;
+package com.mlkit.baidu.facedetector;
 
 import com.facebook.react.ReactPackage;
 import com.facebook.react.bridge.NativeModule;

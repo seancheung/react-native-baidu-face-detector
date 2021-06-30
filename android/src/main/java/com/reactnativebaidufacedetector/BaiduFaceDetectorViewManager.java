@@ -1,4 +1,4 @@
-package com.reactnativebaidufacedetector;
+package com.mlkit.baidu.facedetector;
 
 import android.graphics.Color;
 import android.view.View;

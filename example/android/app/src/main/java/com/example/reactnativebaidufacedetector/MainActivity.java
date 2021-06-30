@@ -1,4 +1,4 @@
-package com.example.reactnativebaidufacedetector;
+package com.mlkit.example;
 
 import com.facebook.react.ReactActivity;
 
