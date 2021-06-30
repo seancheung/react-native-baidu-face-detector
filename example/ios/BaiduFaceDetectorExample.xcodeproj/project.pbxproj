@@ -11,6 +11,7 @@
 		13B07FBC1A68108700A75B9A /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 13B07FB01A68108700A75B9A /* AppDelegate.m */; };
 		13B07FBF1A68108700A75B9A /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 13B07FB51A68108700A75B9A /* Images.xcassets */; };
 		13B07FC11A68108700A75B9A /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 13B07FB71A68108700A75B9A /* main.m */; };
+		14587032268CC5B600ADC673 /* idl-license.face-ios in Resources */ = {isa = PBXBuildFile; fileRef = 14587031268CC5B600ADC673 /* idl-license.face-ios */; };
 		2D02E4BC1E0B4A80006451C7 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 13B07FB01A68108700A75B9A /* AppDelegate.m */; };
 		2D02E4BD1E0B4A84006451C7 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 13B07FB51A68108700A75B9A /* Images.xcassets */; };
 		2D02E4BF1E0B4AB3006451C7 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 13B07FB71A68108700A75B9A /* main.m */; };
@@ -47,6 +48,7 @@
 		13B07FB51A68108700A75B9A /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; name = Images.xcassets; path = BaiduFaceDetectorExample/Images.xcassets; sourceTree = "<group>"; };
 		13B07FB61A68108700A75B9A /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = Info.plist; path = BaiduFaceDetectorExample/Info.plist; sourceTree = "<group>"; };
 		13B07FB71A68108700A75B9A /* main.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = main.m; path = BaiduFaceDetectorExample/main.m; sourceTree = "<group>"; };
+		14587031268CC5B600ADC673 /* idl-license.face-ios */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = "idl-license.face-ios"; sourceTree = "<group>"; };
 		2D02E47B1E0B4A5D006451C7 /* BaiduFaceDetectorExample-tvOS.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "BaiduFaceDetectorExample-tvOS.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		2D02E4901E0B4A5D006451C7 /* BaiduFaceDetectorExample-tvOSTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "BaiduFaceDetectorExample-tvOSTests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
 		47F7ED3B7971BE374F7B8635 /* Pods-BaiduFaceDetectorExample.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-BaiduFaceDetectorExample.debug.xcconfig"; path = "Target Support Files/Pods-BaiduFaceDetectorExample/Pods-BaiduFaceDetectorExample.debug.xcconfig"; sourceTree = "<group>"; };
@@ -110,6 +112,7 @@
 		13B07FAE1A68108700A75B9A /* BaiduFaceDetectorExample */ = {
 			isa = PBXGroup;
 			children = (
+				14587031268CC5B600ADC673 /* idl-license.face-ios */,
 				008F07F21AC5B25A0029DE68 /* main.jsbundle */,
 				13B07FAF1A68108700A75B9A /* AppDelegate.h */,
 				13B07FB01A68108700A75B9A /* AppDelegate.m */,
@@ -315,6 +318,7 @@
 			files = (
 				81AB9BB82411601600AC10FF /* LaunchScreen.storyboard in Resources */,
 				13B07FBF1A68108700A75B9A /* Images.xcassets in Resources */,
+				14587032268CC5B600ADC673 /* idl-license.face-ios in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -348,7 +352,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "export NODE_BINARY=node\n../node_modules/react-native/scripts/react-native-xcode.sh";
+			shellScript = "export NODE_BINARY=node\n../node_modules/react-native/scripts/react-native-xcode.sh\n";
 		};
 		2D02E4CB1E0B4B27006451C7 /* Bundle React Native Code And Images */ = {
 			isa = PBXShellScriptBuildPhase;
@@ -393,10 +397,12 @@
 			);
 			inputPaths = (
 				"${PODS_ROOT}/Target Support Files/Pods-BaiduFaceDetectorExample/Pods-BaiduFaceDetectorExample-frameworks.sh",
+				"${PODS_ROOT}/../../../ios/BDFaceSDK/IDLFaceSDK.framework",
 				"${PODS_XCFRAMEWORKS_BUILD_DIR}/OpenSSL/OpenSSL.framework/OpenSSL",
 			);
 			name = "[CP] Embed Pods Frameworks";
 			outputPaths = (
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/IDLFaceSDK.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/OpenSSL.framework",
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -412,10 +418,18 @@
 			inputPaths = (
 				"${PODS_ROOT}/Target Support Files/Pods-BaiduFaceDetectorExample/Pods-BaiduFaceDetectorExample-resources.sh",
 				"${PODS_CONFIGURATION_BUILD_DIR}/React-Core/AccessibilityResources.bundle",
+				"${PODS_ROOT}/../../../ios/BDFaceSDK/com.baidu.idl.face.faceSDK.bundle",
+				"${PODS_ROOT}/../../../ios/BDFaceSDK/com.baidu.idl.face.model.faceSDK.bundle",
+				"${PODS_ROOT}/../../../ios/BDFaceSDK/com.baidu.idl.face.live.action.image.bundle",
+				"${PODS_ROOT}/../../../ios/BDFaceSDK/idl-key.face-ios",
 			);
 			name = "[CP] Copy Pods Resources";
 			outputPaths = (
 				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/AccessibilityResources.bundle",
+				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/com.baidu.idl.face.faceSDK.bundle",
+				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/com.baidu.idl.face.model.faceSDK.bundle",
+				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/com.baidu.idl.face.live.action.image.bundle",
+				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/idl-key.face-ios",
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;

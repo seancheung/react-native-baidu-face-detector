@@ -14,6 +14,8 @@ Pod::Spec.new do |s|
   s.source       = { :git => "https://github.com/seancheung/react-native-baidu-face-detector.git", :tag => "#{s.version}" }
 
   s.source_files = "ios/**/*.{h,m,mm}"
+  s.resources = ["ios/BDFaceSDK/com.baidu.idl.face.faceSDK.bundle", "ios/BDFaceSDK/com.baidu.idl.face.model.faceSDK.bundle", "ios/BDFaceSDK/com.baidu.idl.face.live.action.image.bundle", "ios/BDFaceSDK/idl-key.face-ios"]
+  s.vendored_frameworks = "ios/BDFaceSDK/IDLFaceSDK.framework"
 
   s.dependency "React-Core"
 end

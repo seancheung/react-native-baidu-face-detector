@@ -5,17 +5,22 @@ Baidu Face SDK for React Native
 ## Installation
 
 ```sh
-npm install react-native-baidu-face-detector
+yarn add react-native-baidu-face-detector
 ```
 
 ## Usage
 
-```js
-import BaiduFaceDetector from "react-native-baidu-face-detector";
+```jsx
+import {
+  initLicense,
+  FaceDetectorView,
+} from 'react-native-baidu-face-detector';
 
 // ...
 
-const result = await BaiduFaceDetector.multiply(3, 7);
+initLicense('app-name');
+
+const Detector = <FaceDetectorView style={{ flex: 1 }} />;
 ```
 
 ## Contributing

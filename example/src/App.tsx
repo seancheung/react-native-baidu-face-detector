@@ -1,12 +1,12 @@
 import * as React from 'react';
 
 import { StyleSheet, View } from 'react-native';
-import BaiduFaceDetectorViewManager from 'react-native-baidu-face-detector';
+import FaceDetectorView from 'react-native-baidu-face-detector';
 
 export default function App() {
   return (
     <View style={styles.container}>
-      <BaiduFaceDetectorViewManager color="#32a852" style={styles.box} />
+      <FaceDetectorView color="#32a852" style={styles.box} />
     </View>
   );
 }
