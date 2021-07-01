@@ -12,39 +12,39 @@ import com.facebook.react.module.annotations.ReactModule;
 
 @ReactModule(name = BaiduFaceDetector.NAME)
 public class BaiduFaceDetector extends ReactContextBaseJavaModule {
-    public static final String NAME = "BaiduFaceDetector";
+  public static final String NAME = "BaiduFaceDetector";
 
-    private boolean mReady;
+  private boolean mReady;
 
-    public BaiduFaceDetector(ReactApplicationContext reactContext) {
-        super(reactContext);
-    }
+  public BaiduFaceDetector(ReactApplicationContext reactContext) {
+    super(reactContext);
+  }
 
-    @Override
-    @NonNull
-    public String getName() {
-        return NAME;
-    }
+  @Override
+  @NonNull
+  public String getName() {
+    return NAME;
+  }
 
-    @ReactMethod
-    public void init(String licenseId, String licenseName, String suffix, Promise promise) {
-      FaceSDKManager.getInstance().initialize(getReactApplicationContext(), licenseId, licenseName, new IInitCallback() {
-        @Override
-        public void initSuccess() {
-          mReady = true;
-          promise.resolve(true);
-        }
+  @ReactMethod
+  public void init(String licenseId, String licenseName, String suffix, Promise promise) {
+    FaceSDKManager.getInstance().initialize(getReactApplicationContext(), licenseId, licenseName, new IInitCallback() {
+      @Override
+      public void initSuccess() {
+        mReady = true;
+        promise.resolve(true);
+      }
 
-        @Override
-        public void initFailure(int i, String s) {
-          mReady = false;
-          promise.reject("E_INIT_" + i, s);
-        }
-      });
-    }
+      @Override
+      public void initFailure(int i, String s) {
+        mReady = false;
+        promise.reject("E_INIT_" + i, s);
+      }
+    });
+  }
 
-    @ReactMethod(isBlockingSynchronousMethod = true)
-    public boolean canWork() {
-      return mReady;
-    }
+  @ReactMethod(isBlockingSynchronousMethod = true)
+  public boolean canWork() {
+    return mReady;
+  }
 }

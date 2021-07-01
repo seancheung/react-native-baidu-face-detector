@@ -16,7 +16,7 @@ RCT_EXPORT_MODULE(BaiduFaceDetectorView)
 
 - (UIView *)view
 {
-  CGRect rect = CGRectMake(0, 0, 240, 240);
+  CGRect rect = CGRectMake(0, 0, 300, 300);
   UIImageView* image = [[UIImageView alloc] initWithFrame:rect];
   image.contentMode = UIViewContentModeScaleAspectFill;
   self.videoCapture = [[VideoCaptureDevice alloc] init];

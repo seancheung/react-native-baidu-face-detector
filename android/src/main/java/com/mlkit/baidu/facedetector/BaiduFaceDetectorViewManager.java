@@ -3,10 +3,8 @@ package com.mlkit.baidu.facedetector;
 import android.Manifest;
 import android.content.Context;
 import android.content.pm.PackageManager;
-import android.graphics.Color;
 import android.hardware.Camera;
 import android.os.Build;
-import android.view.Gravity;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 import android.view.View;
@@ -17,41 +15,40 @@ import androidx.core.content.ContextCompat;
 
 import com.facebook.react.uimanager.SimpleViewManager;
 import com.facebook.react.uimanager.ThemedReactContext;
-import com.facebook.react.uimanager.annotations.ReactProp;
 
 import java.io.IOException;
 
 public class BaiduFaceDetectorViewManager extends SimpleViewManager<View> implements Camera.PreviewCallback,
-SurfaceHolder.Callback {
-    public static final String REACT_CLASS = "BaiduFaceDetectorView";
+  SurfaceHolder.Callback {
+  public static final String REACT_CLASS = "BaiduFaceDetectorView";
 
-    private SurfaceHolder surfaceHolder;
-    private Camera camera;
+  private SurfaceView surfaceView;
+  private FrameLayout frameLayout;
+  private Camera camera;
 
-    @Override
-    @NonNull
-    public String getName() {
-        return REACT_CLASS;
+  @Override
+  @NonNull
+  public String getName() {
+    return REACT_CLASS;
+  }
+
+  @Override
+  @NonNull
+  public View createViewInstance(ThemedReactContext reactContext) {
+    surfaceView = new SurfaceView(reactContext);
+    frameLayout = new FrameLayout(reactContext);
+    frameLayout.setClipChildren(true);
+    frameLayout.setLayoutParams(new FrameLayout.LayoutParams(FrameLayout.LayoutParams.MATCH_PARENT, FrameLayout.LayoutParams.MATCH_PARENT));
+    SurfaceHolder surfaceHolder = surfaceView.getHolder();
+    surfaceHolder.setSizeFromLayout();
+    surfaceHolder.addCallback(this);
+    frameLayout.addView(surfaceView);
+    if (hasCameraPermissions(reactContext)) {
+      camera = Camera.open(Camera.CameraInfo.CAMERA_FACING_FRONT);
+      surfaceHolder.setKeepScreenOn(true);
     }
-
-    @Override
-    @NonNull
-    public View createViewInstance(ThemedReactContext reactContext) {
-        SurfaceView surface = new SurfaceView(reactContext);
-        FrameLayout frameLayout = new FrameLayout(reactContext);
-        frameLayout.setClipChildren(true);
-        frameLayout.setLayoutParams(new FrameLayout.LayoutParams(FrameLayout.LayoutParams.MATCH_PARENT, FrameLayout.LayoutParams.MATCH_PARENT));
-        FrameLayout.LayoutParams params = new FrameLayout.LayoutParams(240,240, Gravity.CENTER_VERTICAL | Gravity.CENTER_HORIZONTAL);
-        surface.setLayoutParams(params);
-        surfaceHolder = surface.getHolder();
-        surfaceHolder.setSizeFromLayout();
-        surfaceHolder.addCallback(this);
-        if(hasCameraPermissions(reactContext)) {
-          camera = Camera.open(0);
-        }
-        frameLayout.addView(surface);
-        return frameLayout;
-    }
+    return frameLayout;
+  }
 
   @Override
   public void onPreviewFrame(byte[] bytes, Camera camera) {
@@ -59,7 +56,11 @@ SurfaceHolder.Callback {
 
   @Override
   public void surfaceCreated(SurfaceHolder surfaceHolder) {
+    if (camera == null) {
+      return;
+    }
     try {
+      camera.setDisplayOrientation(90);
       camera.setPreviewDisplay(surfaceHolder);
       camera.setPreviewCallback(this);
       camera.startPreview();
@@ -69,13 +70,13 @@ SurfaceHolder.Callback {
   }
 
   @Override
-  public void surfaceChanged(SurfaceHolder surfaceHolder, int i, int i1, int i2) {
+  public void surfaceChanged(SurfaceHolder surfaceHolder, int format, int width, int height) {
 
   }
 
   @Override
   public void surfaceDestroyed(SurfaceHolder surfaceHolder) {
-
+    surfaceHolder.removeCallback(this);
   }
 
   private boolean hasCameraPermissions(Context context) {
