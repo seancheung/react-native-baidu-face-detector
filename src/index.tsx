@@ -136,8 +136,8 @@ const { BaiduFaceDetector } = NativeModules;
 export async function authorize(appName: string): Promise<boolean>;
 /**
  * 初始化SDK授权
- * @param licenseName 证书名称
  * @param licenseId 证书ID
+ * @param licenseName 证书名称
  * @param suffix 后缀
  * @returns 是否授权成功
  */
@@ -157,6 +157,9 @@ export async function authorize(
       android: 'face-android',
       ios: 'face-ios',
     });
+    if (Platform.OS === 'android') {
+      licenseName += '.' + suffix;
+    }
     licenseId += '-' + suffix;
   }
   return BaiduFaceDetector.init(licenseId, licenseName, suffix);
