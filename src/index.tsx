@@ -3,11 +3,11 @@ import {
   ViewStyle,
   NativeModules,
   Platform,
+  StyleProp,
 } from 'react-native';
 
 export interface FaceDetectorProps {
-  color: string;
-  style?: ViewStyle;
+  style?: StyleProp<ViewStyle>;
   /**
    * 预测库耗能模式
    * @default 0

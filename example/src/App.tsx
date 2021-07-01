@@ -9,7 +9,7 @@ export default function App() {
   }
   return (
     <View style={styles.container}>
-      <FaceDetectorView color="#32a852" style={styles.box} />
+      <FaceDetectorView style={styles.box} />
     </View>
   );
 }
@@ -21,8 +21,9 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
   },
   box: {
-    width: 60,
-    height: 60,
+    width: 240,
+    height: 240,
+    borderRadius: 120,
     marginVertical: 20,
   },
 });
