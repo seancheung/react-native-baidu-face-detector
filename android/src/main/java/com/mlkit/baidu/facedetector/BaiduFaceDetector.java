@@ -14,7 +14,7 @@ import com.facebook.react.module.annotations.ReactModule;
 public class BaiduFaceDetector extends ReactContextBaseJavaModule {
     public static final String NAME = "BaiduFaceDetector";
 
-    private boolean mReady = false;
+    private boolean mReady;
 
     public BaiduFaceDetector(ReactApplicationContext reactContext) {
         super(reactContext);
