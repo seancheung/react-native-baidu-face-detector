@@ -14,6 +14,7 @@ import android.view.View;
 import android.widget.FrameLayout;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.core.content.ContextCompat;
 
 import com.baidu.idl.face.platform.FaceSDKManager;
@@ -21,11 +22,17 @@ import com.baidu.idl.face.platform.FaceStatusNewEnum;
 import com.baidu.idl.face.platform.IDetectStrategy;
 import com.baidu.idl.face.platform.IDetectStrategyCallback;
 import com.baidu.idl.face.platform.model.ImageInfo;
+import com.facebook.react.bridge.Arguments;
+import com.facebook.react.bridge.ReactContext;
+import com.facebook.react.bridge.WritableMap;
+import com.facebook.react.common.MapBuilder;
 import com.facebook.react.uimanager.SimpleViewManager;
 import com.facebook.react.uimanager.ThemedReactContext;
+import com.facebook.react.uimanager.events.RCTEventEmitter;
 
 import java.io.IOException;
 import java.util.HashMap;
+import java.util.Map;
 
 public class BaiduFaceDetectorViewManager extends SimpleViewManager<View> implements Camera.PreviewCallback,
   SurfaceHolder.Callback, IDetectStrategyCallback {
@@ -40,6 +47,15 @@ public class BaiduFaceDetectorViewManager extends SimpleViewManager<View> implem
   @NonNull
   public String getName() {
     return REACT_CLASS;
+  }
+
+  @Override
+  @Nullable
+  public Map getExportedCustomDirectEventTypeConstants() {
+    return MapBuilder.of(
+      "onDetect",
+      MapBuilder.of("registrationName", "onDetect")
+    );
   }
 
   @Override
@@ -94,6 +110,14 @@ public class BaiduFaceDetectorViewManager extends SimpleViewManager<View> implem
     surfaceHolder.removeCallback(this);
   }
 
+  @Override
+  public void onDetectCompletion(FaceStatusNewEnum status, String message, HashMap<String, ImageInfo> crop, HashMap<String, ImageInfo> src) {
+    Log.i("detect", String.format("status: %s. message: %s", status, message));
+    WritableMap event = Arguments.createMap();
+    event.putString("code", status.toString());
+    ((ReactContext) frameLayout.getContext()).getJSModule(RCTEventEmitter.class).receiveEvent(frameLayout.getId(), "onDetect", event);
+  }
+
   private boolean hasCameraPermissions(Context context) {
     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
       int result = ContextCompat.checkSelfPermission(context, Manifest.permission.CAMERA);
@@ -101,10 +125,5 @@ public class BaiduFaceDetectorViewManager extends SimpleViewManager<View> implem
     } else {
       return true;
     }
-  }
-
-  @Override
-  public void onDetectCompletion(FaceStatusNewEnum status, String message, HashMap<String, ImageInfo> crop, HashMap<String, ImageInfo> src) {
-    Log.i("detect", String.format("status: %s. message: %s", status, message));
   }
 }
