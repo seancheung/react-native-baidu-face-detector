@@ -12,6 +12,7 @@
 @interface BaiduFaceDetectorViewManager : RCTViewManager
 @property (nonatomic, readwrite, assign) BOOL hasFinished;
 @property (nonatomic, readwrite, retain) UIImageView *preview;
+@property (nonatomic, copy) RCTDirectEventBlock onDetect;
 @end
 
 @interface BaiduFaceDetectorViewManager () <CaptureDataOutputProtocol>
@@ -30,7 +31,6 @@ RCT_EXPORT_VIEW_PROPERTY(onDetect, RCTDirectEventBlock);
     image.contentMode = UIViewContentModeScaleAspectFill;
     self.videoCapture = [[VideoCaptureDevice alloc] init];
     self.videoCapture.delegate = self;
-    _hasFinished = NO;
     self.videoCapture.runningStatus = YES;
     [self.videoCapture startSession];
     RNTFaceView* view = [RNTFaceView new];
@@ -38,6 +38,12 @@ RCT_EXPORT_VIEW_PROPERTY(onDetect, RCTDirectEventBlock);
     self.preview = image;
     view.clipsToBounds = YES;
     [self initSDK];
+    self.onDetect = ^(NSDictionary *body) {
+        if(view.onDetect) {
+            view.onDetect(body);
+        }
+    };
+    self.hasFinished = NO;
     return view;
 }
 
@@ -78,7 +84,10 @@ RCT_EXPORT_VIEW_PROPERTY(onDetect, RCTDirectEventBlock);
     }
     __weak typeof(self) weakSelf = self;
     [[FaceSDKManager sharedInstance] detectWithImage:image isRreturnOriginalValue:NO completion:^(FaceInfo *faceinfo, ResultCode resultCode) {
-        NSLog(@"Code %lu", (unsigned long)resultCode);
+//        NSLog(@"Code %lu", (unsigned long)resultCode);
+        if(weakSelf.onDetect) {
+            weakSelf.onDetect(@{@"code": @(resultCode)});
+        }
         switch (resultCode) {
             case ResultCodeOK:
                 weakSelf.hasFinished = YES;
