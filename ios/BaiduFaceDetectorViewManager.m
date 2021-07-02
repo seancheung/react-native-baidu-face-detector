@@ -1,5 +1,13 @@
 #import <React/RCTViewManager.h>
 #import "VideoCaptureDevice.h"
+#import "FaceSDKManager.h"
+
+@interface RNTFaceView : UIView
+@property (nonatomic, copy) RCTDirectEventBlock onDetect;
+@end
+
+@implementation RNTFaceView
+@end
 
 @interface BaiduFaceDetectorViewManager : RCTViewManager
 @property (nonatomic, readwrite, assign) BOOL hasFinished;
@@ -13,22 +21,24 @@
 @implementation BaiduFaceDetectorViewManager
 
 RCT_EXPORT_MODULE(BaiduFaceDetectorView)
+RCT_EXPORT_VIEW_PROPERTY(onDetect, RCTDirectEventBlock);
 
 - (UIView *)view
 {
-  CGRect rect = CGRectMake(0, 0, 300, 300);
-  UIImageView* image = [[UIImageView alloc] initWithFrame:rect];
-  image.contentMode = UIViewContentModeScaleAspectFill;
-  self.videoCapture = [[VideoCaptureDevice alloc] init];
-  self.videoCapture.delegate = self;
-  _hasFinished = NO;
-  self.videoCapture.runningStatus = YES;
-  [self.videoCapture startSession];
-  UIView* view = [[UIView alloc] init];
-  [view addSubview:image];
-  self.preview = image;
-  view.clipsToBounds = YES;
-  return view;
+    CGRect rect = CGRectMake(0, 0, 300, 300);
+    UIImageView* image = [[UIImageView alloc] initWithFrame:rect];
+    image.contentMode = UIViewContentModeScaleAspectFill;
+    self.videoCapture = [[VideoCaptureDevice alloc] init];
+    self.videoCapture.delegate = self;
+    _hasFinished = NO;
+    self.videoCapture.runningStatus = YES;
+    [self.videoCapture startSession];
+    RNTFaceView* view = [RNTFaceView new];
+    [view addSubview:image];
+    self.preview = image;
+    view.clipsToBounds = YES;
+    [self initSDK];
+    return view;
 }
 
 - (void)captureOutputSampleBuffer:(UIImage *)image {
@@ -39,7 +49,7 @@ RCT_EXPORT_MODULE(BaiduFaceDetectorView)
     dispatch_async(dispatch_get_main_queue(), ^{
         weakSelf.preview.image = image;
     });
-    // TODO: process image
+    [self detectFace:image];
 }
 
 - (void)captureError {
@@ -55,6 +65,28 @@ RCT_EXPORT_MODULE(BaiduFaceDetectorView)
         }];
         [alert addAction:action];
     });
+}
+
+- (void)initSDK {
+    
+    [[FaceSDKManager sharedInstance] initCollect];
+}
+
+- (void)detectFace:(UIImage *)image {
+    if (self.hasFinished) {
+        return;
+    }
+    __weak typeof(self) weakSelf = self;
+    [[FaceSDKManager sharedInstance] detectWithImage:image isRreturnOriginalValue:NO completion:^(FaceInfo *faceinfo, ResultCode resultCode) {
+        NSLog(@"Code %lu", (unsigned long)resultCode);
+        switch (resultCode) {
+            case ResultCodeOK:
+                weakSelf.hasFinished = YES;
+                break;
+            default:
+                break;
+        }
+    }];
 }
 
 @end

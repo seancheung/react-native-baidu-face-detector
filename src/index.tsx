@@ -4,6 +4,7 @@ import {
   NativeModules,
   Platform,
   StyleProp,
+  NativeSyntheticEvent,
 } from 'react-native';
 
 export interface FaceDetectorProps {
@@ -113,9 +114,9 @@ export interface FaceDetectorProps {
    */
   minRect?: number;
   /**
-   * 人脸检测完成事件
+   * 人脸检测事件
    */
-  onFaceDetected?: (res: any) => void;
+  onDetect?: (e: NativeSyntheticEvent<any>) => void;
 }
 export interface Eulur {
   pitch: number;

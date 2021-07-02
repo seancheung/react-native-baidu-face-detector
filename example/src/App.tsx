@@ -58,7 +58,12 @@ export default function App() {
   return (
     <View style={styles.container}>
       <View style={styles.clip}>
-        <FaceDetectorView style={styles.camera} />
+        <FaceDetectorView
+          style={styles.camera}
+          onDetect={(e) => {
+            console.log(e.nativeEvent);
+          }}
+        />
       </View>
     </View>
   );

@@ -75,7 +75,7 @@
         connection.videoOrientation = AVCaptureVideoOrientationPortrait;
         // 调节摄像头翻转
         [connection setVideoMirrored:YES];
-//        connection.videoMirrored = (_position == AVCaptureDevicePositionFront);
+        //        connection.videoMirrored = (_position == AVCaptureDevicePositionFront);
         [self.captureSession startRunning];
     }
 #endif
