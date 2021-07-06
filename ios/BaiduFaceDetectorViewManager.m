@@ -86,7 +86,8 @@ RCT_EXPORT_VIEW_PROPERTY(onDetect, RCTDirectEventBlock);
     [[FaceSDKManager sharedInstance] detectWithImage:image isRreturnOriginalValue:NO completion:^(FaceInfo *faceinfo, ResultCode resultCode) {
 //        NSLog(@"Code %lu", (unsigned long)resultCode);
         if(weakSelf.onDetect) {
-            weakSelf.onDetect(@{@"code": @(resultCode)});
+            NSString *url = [self saveImage:image];
+            weakSelf.onDetect(@{@"code": @(resultCode), @"url": url});
         }
         switch (resultCode) {
             case ResultCodeOK:
@@ -96,6 +97,14 @@ RCT_EXPORT_VIEW_PROPERTY(onDetect, RCTDirectEventBlock);
                 break;
         }
     }];
+}
+
+- (NSString *)saveImage:(UIImage *)image {
+    NSString *dir = NSTemporaryDirectory();
+    NSString *name = [NSString stringWithFormat:@"%@.jpg", [[NSUUID UUID] UUIDString]];
+    NSString* path = [dir stringByAppendingPathComponent:name];
+    [UIImageJPEGRepresentation(image, 1.0) writeToFile:path atomically:YES];
+    return  path;
 }
 
 @end
