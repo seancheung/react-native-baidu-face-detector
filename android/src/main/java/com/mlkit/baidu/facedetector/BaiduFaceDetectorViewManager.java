@@ -7,6 +7,8 @@ import android.graphics.PixelFormat;
 import android.graphics.Rect;
 import android.hardware.Camera;
 import android.os.Build;
+import android.os.Environment;
+import android.util.Base64;
 import android.util.Log;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
@@ -30,9 +32,13 @@ import com.facebook.react.uimanager.SimpleViewManager;
 import com.facebook.react.uimanager.ThemedReactContext;
 import com.facebook.react.uimanager.events.RCTEventEmitter;
 
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.UUID;
 
 public class BaiduFaceDetectorViewManager extends SimpleViewManager<View> implements Camera.PreviewCallback,
   SurfaceHolder.Callback, IDetectStrategyCallback {
@@ -115,6 +121,17 @@ public class BaiduFaceDetectorViewManager extends SimpleViewManager<View> implem
     Log.i("detect", String.format("status: %s. message: %s", status, message));
     WritableMap event = Arguments.createMap();
     event.putString("code", status.toString());
+    // TODO: get best image
+    byte[] bytes = Base64.decode(crop.get("TODO").getBase64(), Base64.DEFAULT);
+    String url = null;
+    try {
+      url = saveImage(bytes);
+    } catch (IOException e) {
+      event.putString("error", e.getMessage());
+    }
+    if (url != null) {
+      event.putString("url", url);
+    }
     ((ReactContext) frameLayout.getContext()).getJSModule(RCTEventEmitter.class).receiveEvent(frameLayout.getId(), "onDetect", event);
   }
 
@@ -125,5 +142,13 @@ public class BaiduFaceDetectorViewManager extends SimpleViewManager<View> implem
     } else {
       return true;
     }
+  }
+
+  private String saveImage(byte[] bytes) throws IOException {
+    File image = new File(Environment.getDownloadCacheDirectory(), UUID.randomUUID().toString() + ".jpg");
+    FileOutputStream stream = new FileOutputStream(image.getPath());
+    stream.write(bytes);
+    stream.close();
+    return image.getPath();
   }
 }
